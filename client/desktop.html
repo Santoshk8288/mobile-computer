@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Desktop</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div id="login">
+		<h2>Please enter this code to access the system <h2 id="code"></h2></h2>	
+	</div>
+	<div id="main" style="display: none;">
+		<h2>Press Arrow keys from your device to move the box</h2>
+		<canvas id="myCanvas" width="500" height="500" style="border:1px solid #d3d3d3;">
+	</div>
+</body>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+		
+		var c = document.getElementById("myCanvas");
+		var ctx = c.getContext("2d");
+		// ctx.fillRect(200, 200, 100, 100);
+		var code = parseInt(Math.random()*10000)
+		$('#code').html(code)
+
+		var connectionOptions =  {
+		  "force new connection" : true,
+		  "reconnectionAttempts": 1, 
+		  "timeout" : 10000, 
+		  "transports" : ["websocket"],
+		  "query": {'code':code}
+		};
+
+		var socket = io.connect('192.168.88.73:3000', connectionOptions)
+
+		socket.on('main page', function(){
+			$('#login').css('display', 'none')
+			$('#main').css('display', 'block')
+		})
+
+		socket.on('moved', function(key){
+			// ctx.clearRect(0,0,500,500)
+			// ctx.fillRect(key.x, key.y, 100, 100);
+		})
+	</script>
+</html>

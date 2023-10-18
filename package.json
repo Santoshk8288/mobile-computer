@@ -1,0 +1,21 @@
+{
+  "name": "mobile-computer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "script": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "express-device": "^0.4.2",
+    "http": "0.0.0",
+    "nodemon": "^1.18.3",
+    "robotjs": "^0.5.1",
+    "socket.io": "^2.1.1"
+  }
+}

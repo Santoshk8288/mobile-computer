@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mobile</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div id="login">
+		<h2>Please enter the code here</h2>
+		<input type="number" name="code" id="code">
+		<input type="button" value="submit" onclick="submit()">
+	</div>
+	<div id="main" style="display: none">
+		<script type="text/html" id="joystick-view">
+    <canvas id="joystickCanvas" width="<%= squareSize %>" height="<%= squareSize %>" style="width: <%= squareSize %>px; height: <%= squareSize %>px;">
+        </canvas>
+    </script>
+    <div id="joystickContent">
+    </div>
+    <button onclick="press()">Click</button>
+	</div>	
+</body>
+	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+  <script type="text/javascript" src="js/underscore-min.js"></script>
+  <script type="text/javascript" src="js/backbone-min.js"></script>
+  <script type="text/javascript" src="js/joystick_view.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+
+		var socket, pressTimer, direction
+		function submit(){
+			var code = $('#code').val()
+			if(code != ''){
+				var connectionOptions =  {
+				  "force new connection" : true,
+				  "reconnectionAttempts": 1, 
+				  "timeout" : 10000, 
+				  "transports" : ["websocket"],
+				  "query": {'code':code}
+				};
+				socket = io.connect('192.168.88.73:3000', connectionOptions)
+
+				socket.on('main page', function(){
+					$('#login').css('display', 'none')
+					$('#main').css('display', 'block')
+				})	
+			}
+		}
+
+    $(document).ready(function(){
+      var joystickView = new JoystickView(300, function(callbackView){
+          $("#joystickContent").append(callbackView.render().el);
+          setTimeout(function(){
+            callbackView.renderSprite();
+          }, 0);
+      });
+      joystickView.bind("verticalMove", function(y){
+        socket.emit('move-y',parseInt(y*10))
+        // console.log(y)
+      });
+      joystickView.bind("horizontalMove", function(x){
+        socket.emit('move-x',parseInt(x*10))
+        // console.log(x);
+      });
+    });
+		
+    function press(){
+			socket.emit('click')
+		}
+	</script>
+</html>

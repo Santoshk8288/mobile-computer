@@ -1,0 +1,29 @@
+table {
+    width: 200px;
+    border: none;
+    margin: 0 auto;
+    height: 100vh;
+}
+tbody{
+	display: table-cell;
+}
+tr td:first-child{
+	border-left:none;
+}
+tr td:last-child{
+	border-right:none;
+}
+td{
+	text-align: center;
+	height: 40px;
+	border: none;
+	margin: 0;
+  padding: 0;
+  width: 60px;
+}
+tr:first-child td{
+    border-top: none;
+}
+tr:last-child td {
+	border-bottom: none;
+}
